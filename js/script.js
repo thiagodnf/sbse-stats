@@ -3,6 +3,8 @@ var spinner;
 var rankingByCountries = [];
 var rankingByAuthors = [];
 var rankingByApplications = [];
+var rankingByJournals = [];
+var rankingByConferences = [];
 
 function insertOrUpdate(array, label){
 	var index = containts(array, label);
@@ -33,12 +35,24 @@ function hideSpin(){
     spinner.stop();
 }
 
+function showCredits(){
+	$(".credits").removeClass("hide");
+}
+
 function viewDataAuthor(){
 	$('#modal-view-data-author').modal('show');
 }
 
 function viewDataApplication(){
 	$('#modal-view-data-application').modal('show');
+}
+
+function viewDataJournals(){
+	$('#modal-view-data-journals').modal('show');
+}
+
+function viewDataConferences(){
+	$('#modal-view-data-conferences').modal('show');
 }
 
 function loadBibtextFileFromUrl(){
@@ -73,9 +87,13 @@ function success(response){
     plotPlubicationsNumberByApplications(entries);
     //plotPublicationsNumberInTheWorldCountries();
     //console.log(rankingByAuthors);
+	plotPlubicationsNumberByJournals(entries);
 
+	plotPlubicationsNumberByConferences(entries);
     //console.log(rankingByApplications)
     hideSpin();
+
+	showCredits();
 }
 
 /** Convert the entry type to readable text */
@@ -215,6 +233,8 @@ function processEntry(entry){
     //generateRankingByCountries(entry);
     generateRankingByAuthors(entry);
     generateRankingByApplications(entry);
+	generateRankingByJournals(entry);
+	generateRankingByConferences(entry);
 }
 
 function trimAllFields(entry){
@@ -227,8 +247,48 @@ function trimAllFields(entry){
 
 function generateRankingByAuthors(entry){
     $.each(entry.author, function (index, value) {
-		insertOrUpdate(rankingByAuthors, value.last);
+		insertOrUpdate(rankingByAuthors, value.last.trim());
 	});
+}
+
+function generateRankingByConferences(entry){
+	// Only conferences entry type is considered in this ranking
+	if(entry.entryType != "inproceedings"){
+		return;
+	}
+
+	if(entry.booktitle == undefined || entry.booktitle == ""){
+		//console.log("Problem in "+entry.cite);
+		return;
+	}
+
+	var index = entry.booktitle.indexOf("(");
+
+	var txt = entry.booktitle.substring(index, entry.booktitle.length);
+
+	txt = txt.replace("(", "").replace(")", "");
+
+	var conf = txt.split('\'');
+
+	if(conf.length != 1){
+		insertOrUpdate(rankingByConferences, conf[0].trim());
+	}else{
+		conf = txt.split('’');
+		if(conf.length != 1){
+			insertOrUpdate(rankingByConferences, conf[0].trim());
+		}else{
+			//console.log("Problem in "+entry.booktitle);
+		}
+	}
+}
+
+function generateRankingByJournals(entry){
+	// Only journals entry type is considered in this ranking
+	if(entry.entryType != "article"){
+		return;
+	}
+
+	insertOrUpdate(rankingByJournals, entry.journal.trim());
 }
 
 function generateRankingByCountries(entry){
@@ -395,7 +455,7 @@ function plotPlubicationsNumberByAuthors(entries){
 		$('#table-view-data-author tr:last').after('<tr><td>'+(key+1)+'</td><td>'+entry.label+'</td><td>'+entry.count+'</td></tr>');
     });
 
-    series.push({name: "Authors", data: data});
+    series.push({name: "Papers", data: data});
 
     var chart = $('#chart-author').highcharts({
         chart: {
@@ -403,8 +463,107 @@ function plotPlubicationsNumberByAuthors(entries){
             height: 700
         },
         title: {
-            text: "Number Of Publications by Author"
+            text: "Number of Publications by Author"
         },
+        xAxis: {
+            categories: categories,
+            title: {
+                text: null
+            }
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: 'Number of Papers',
+                align: 'high'
+            },
+            labels: {
+                overflow: 'justify'
+            }
+        },
+        legend: {
+            enabled: false,
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'top',
+            x: -40,
+            y: 80,
+            floating: true,
+            borderWidth: 1,
+            backgroundColor: ((Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'),
+            shadow: true
+        },
+        tooltip: {
+            valueSuffix: ' papers',
+        },
+		plotOptions: {
+            bar: {
+                dataLabels: {
+                    enabled: true
+                }
+            }
+        },
+		exporting: {
+            buttons: {
+                customButton: {
+                    x: -40,
+                    onclick: viewDataAuthor,
+                    text: "View data"
+                }
+            }
+        },
+        credits: {
+            enabled: false
+        },
+        series: series
+    });
+}
+
+function plotPlubicationsNumberByJournals(entries){
+    // Sort the Array
+    rankingByJournals.sort(function(a, b){
+        var diff = parseInt(a.count) - parseInt(b.count);
+
+        if(diff == 0){
+            return 0;
+        }else if(diff > 0){
+            return -1;
+        }else if(diff < 0){
+            return 1;
+        }
+    });
+
+    var categories = [];
+
+    var series = [];
+
+    var max = 30;
+
+    var data = [];
+
+	$.each(rankingByJournals, function(key, entry){
+
+	    if(data.length != 30){
+	        categories.push(entry.label);
+	        data.push(entry.count);
+		}
+
+		$('#table-view-data-journals tr:last').after('<tr><td>'+(key+1)+'</td><td>'+entry.label+'</td><td>'+entry.count+'</td></tr>');
+    });
+
+    series.push({name: "Papers", data: data, color: "#90ed7d"});
+
+    var chart = $('#chart-journals').highcharts({
+        chart: {
+            type: 'bar',
+            height: 700
+        },
+        title: {
+            text: "Number of Publications by Journals"
+        },
+		subtitle: {
+			text: 'An Estimate'
+		},
         xAxis: {
             categories: categories,
             title: {
@@ -447,7 +606,7 @@ function plotPlubicationsNumberByAuthors(entries){
             buttons: {
                 customButton: {
                     x: -40,
-                    onclick: viewDataAuthor,
+                    onclick: viewDataJournals,
                     text: "View data"
                 }
             }
@@ -457,8 +616,105 @@ function plotPlubicationsNumberByAuthors(entries){
         },
         series: series
     });
+}
 
-	//chart.renderer.button('Click me', 150, 25, function(){alert("oi")})
+function plotPlubicationsNumberByConferences(entries){
+    // Sort the Array
+    rankingByConferences.sort(function(a, b){
+        var diff = parseInt(a.count) - parseInt(b.count);
+
+        if(diff == 0){
+            return 0;
+        }else if(diff > 0){
+            return -1;
+        }else if(diff < 0){
+            return 1;
+        }
+    });
+
+    var categories = [];
+
+    var series = [];
+
+    var max = 30;
+
+    var data = [];
+
+	$.each(rankingByConferences, function(key, entry){
+
+	    if(data.length != 30){
+	        categories.push(entry.label);
+	        data.push(entry.count);
+		}
+
+		$('#table-view-data-conferences tr:last').after('<tr><td>'+(key+1)+'</td><td>'+entry.label+'</td><td>'+entry.count+'</td></tr>');
+    });
+
+    series.push({name: "Papers", data: data, color: "#f7a35c"});
+
+    var chart = $('#chart-conferences').highcharts({
+        chart: {
+            type: 'bar',
+            height: 700
+        },
+        title: {
+            text: "Number of Publications by Conference"
+        },
+		subtitle: {
+			text: 'An Estimate'
+		},
+        xAxis: {
+            categories: categories,
+            title: {
+                text: null
+            }
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: 'Number of Papers',
+                align: 'high'
+            },
+            labels: {
+                overflow: 'justify'
+            }
+        },
+        legend: {
+            enabled: false,
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'top',
+            x: -40,
+            y: 80,
+            floating: true,
+            borderWidth: 1,
+            backgroundColor: ((Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'),
+            shadow: true
+        },
+        tooltip: {
+            valueSuffix: ' papers'
+        },
+        plotOptions: {
+            bar: {
+                dataLabels: {
+                    enabled: true
+                }
+            }
+        },
+		exporting: {
+            buttons: {
+                customButton: {
+                    x: -40,
+                    onclick: viewDataConferences,
+                    text: "View data"
+                }
+            }
+        },
+        credits: {
+            enabled: false
+        },
+        series: series
+    });
 }
 
 function plotPlubicationsNumberByApplications(entries){
@@ -504,7 +760,7 @@ function plotPlubicationsNumberByApplications(entries){
             height: 500
         },
         title: {
-            text: "Number Of Publications by Application"
+            text: "Number of Publications by Application"
         },
         tooltip: {
             pointFormat: '{series.name}: <b>{point.y}</b>'

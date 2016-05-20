@@ -11,6 +11,15 @@ body{
     overflow-y: auto;
 }
 
+.credits{
+    padding-bottom: 10px;
+    padding-left: 20px;
+    padding-top: 1px;
+}
+
+.credits ul li{
+    padding-bottom: 10px;
+}
 
 .header, .chart{
     margin-bottom: 30px;

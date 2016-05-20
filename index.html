@@ -59,6 +59,19 @@
             <div class="chart" id="chart-publications"></div>
             <div class="chart" id="chart-application"></div>
             <div class="chart" id="chart-author"></div>
+            <div class="chart" id="chart-journals"></div>
+            <div class="chart" id="chart-conferences"></div>
+
+            <div class="chart credits hide">
+                <h3>Credits</h3>
+                <p>This page uses some great libraries:</p>
+                <ul>
+                    <li><a href="https://osdn.jp/projects/sfnet_jsbibtex/">JavaScript BibTeX Parser</a></li>
+                    <li><a href="http://highcharts.com">Highcharts</a></li>
+                    <li><a href="https://jquery.com/">jQuery</a></li>
+                    <li><a href="http://getbootstrap.com/">Bootstrap</a></li>
+                </ul>
+            </div>
         </div>
 
         <div class="modal" id="modal-view-data-author" tabindex="-1" role="dialog" aria-labelledby="modal-change-location-label">
@@ -95,6 +108,58 @@
 					</div>
 					<div class="modal-body">
 						<table class="table table-striped" id="table-view-data-application">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Author</th>
+                                    <th>Publications</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+        <div class="modal" id="modal-view-data-journals" tabindex="-1" role="dialog" aria-labelledby="modal-change-location-label">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title" id="modal-change-location-label">Applications</h4>
+					</div>
+					<div class="modal-body">
+						<table class="table table-striped" id="table-view-data-journals">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Author</th>
+                                    <th>Publications</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+        <div class="modal" id="modal-view-data-conferences" tabindex="-1" role="dialog" aria-labelledby="modal-change-location-label">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title" id="modal-change-location-label">Applications</h4>
+					</div>
+					<div class="modal-body">
+						<table class="table table-striped" id="table-view-data-conferences">
                             <thead>
                                 <tr>
                                     <th>#</th>
