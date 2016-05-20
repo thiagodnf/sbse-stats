@@ -256,7 +256,7 @@ function plotListOfPublications(series, years){
              text: "List of Publications"
          },
          subtitle: {
-            text: 'Source: <a href="http://crestweb.cs.ucl.ac.uk/resources/sbse_repository/">http://crestweb.cs.ucl.ac.uk/resources/sbse_repository/</a>'
+            text: 'Source: <a target="_blank" href="http://crestweb.cs.ucl.ac.uk/resources/sbse_repository/">http://crestweb.cs.ucl.ac.uk/resources/sbse_repository/</a>'
          },
          xAxis: {
              categories: years
@@ -393,10 +393,10 @@ function plotPlubicationsNumberByAuthors(entries){
             height: 700
         },
         title: {
-            text: "Plubications Number By Authors"
+            text: "Number Of Publications by Author"
         },
         subtitle: {
-           text: 'Source: <a href="http://crestweb.cs.ucl.ac.uk/resources/sbse_repository/">http://crestweb.cs.ucl.ac.uk/resources/sbse_repository/</a>'
+           text: 'Source: <a target="_blank" href="http://crestweb.cs.ucl.ac.uk/resources/sbse_repository/">http://crestweb.cs.ucl.ac.uk/resources/sbse_repository/</a>'
         },
         xAxis: {
             categories: categories,
@@ -469,10 +469,10 @@ function plotPlubicationsNumberByApplications(entries){
             height: 500
         },
         title: {
-            text: "Publications Number by Applications"
+            text: "Number Of Publications by Application"
         },
         subtitle: {
-           text: 'Source: <a href="http://crestweb.cs.ucl.ac.uk/resources/sbse_repository/">http://crestweb.cs.ucl.ac.uk/resources/sbse_repository/</a>'
+           text: 'Source: <a target="_blank" href="http://crestweb.cs.ucl.ac.uk/resources/sbse_repository/">http://crestweb.cs.ucl.ac.uk/resources/sbse_repository/</a>'
         },
         tooltip: {
             pointFormat: '{series.name}: <b>{point.y}</b>'
