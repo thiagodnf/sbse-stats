@@ -49,19 +49,73 @@
             </div>
 
             <p>This page is maintained by <a target="_blank" href="http://www.github.com/thiagodnf">Thiago Nascimento</a></p>
+            <p>Source: <a target="_blank" href="http://crestweb.cs.ucl.ac.uk/resources/sbse_repository/">http://crestweb.cs.ucl.ac.uk/resources/sbse_repository/</a></p>
+            <br>
 
             <div id="spin"></div>
 
             <div id="error"></div>
-            <div class="chart" id="chart"></div>
-            <div class="chart" id="chart-2"></div>
 
-            <div class="chart" id="chart-4"></div>
-            <div class="chart" id="chart-3"></div>
+            <div class="chart" id="chart-publications"></div>
+            <div class="chart" id="chart-application"></div>
+            <div class="chart" id="chart-author"></div>
         </div>
+
+        <div class="modal" id="modal-view-data-author" tabindex="-1" role="dialog" aria-labelledby="modal-change-location-label">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title" id="modal-change-location-label">Authors</h4>
+					</div>
+					<div class="modal-body">
+						<table class="table table-striped" id="table-view-data-author">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Author</th>
+                                    <th>Publications</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+        <div class="modal" id="modal-view-data-application" tabindex="-1" role="dialog" aria-labelledby="modal-change-location-label">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title" id="modal-change-location-label">Applications</h4>
+					</div>
+					<div class="modal-body">
+						<table class="table table-striped" id="table-view-data-application">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Author</th>
+                                    <th>Publications</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+					</div>
+				</div>
+			</div>
+		</div>
 
         <script type="text/javascript" charset="utf8" src="js/jquery.min.js"></script>
         <script type="text/javascript" charset="utf8" src="js/highcharts.js"></script>
+        <script type="text/javascript" charset="utf8" src="js/bootstrap.min.js"></script>
         <script type="text/javascript" charset="utf8" src="js/spin.min.js"></script>
         <script type="text/javascript" charset="utf8" src="js/exporting.js"></script>
         <script type="text/javascript" charset="utf8" src="js/BibTex-0.1.2.js"></script>

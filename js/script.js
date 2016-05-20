@@ -33,6 +33,14 @@ function hideSpin(){
     spinner.stop();
 }
 
+function viewDataAuthor(){
+	$('#modal-view-data-author').modal('show');
+}
+
+function viewDataApplication(){
+	$('#modal-view-data-application').modal('show');
+}
+
 function loadBibtextFileFromUrl(){
     showSpin()
 
@@ -246,7 +254,7 @@ function generateRankingByApplications(entry){
 }
 
 function plotListOfPublications(series, years){
-    $("#chart").highcharts({
+    $("#chart-publications").highcharts({
          chart: {
              type: 'column',
              marginTop: 100,
@@ -254,9 +262,6 @@ function plotListOfPublications(series, years){
          },
          title: {
              text: "List of Publications"
-         },
-         subtitle: {
-            text: 'Source: <a target="_blank" href="http://crestweb.cs.ucl.ac.uk/resources/sbse_repository/">http://crestweb.cs.ucl.ac.uk/resources/sbse_repository/</a>'
          },
          xAxis: {
              categories: years
@@ -279,7 +284,7 @@ function plotListOfPublications(series, years){
              align: 'right',
              x: -30,
              verticalAlign: 'top',
-             y: 50,
+             y: 30,
              floating: true,
              backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
              borderColor: '#CCC',
@@ -380,23 +385,25 @@ function plotPlubicationsNumberByAuthors(entries){
 
     var data = [];
 
-    for(var i = 0; i < max; i++){
-        categories.push(rankingByAuthors[i].label);
-        data.push(rankingByAuthors[i].count);
-    }
+	$.each(rankingByAuthors, function(key, entry){
+
+	    if(data.length != 30){
+	        categories.push(entry.label);
+	        data.push(entry.count);
+		}
+
+		$('#table-view-data-author tr:last').after('<tr><td>'+(key+1)+'</td><td>'+entry.label+'</td><td>'+entry.count+'</td></tr>');
+    });
 
     series.push({name: "Authors", data: data});
 
-    $('#chart-3').highcharts({
+    var chart = $('#chart-author').highcharts({
         chart: {
             type: 'bar',
             height: 700
         },
         title: {
             text: "Number Of Publications by Author"
-        },
-        subtitle: {
-           text: 'Source: <a target="_blank" href="http://crestweb.cs.ucl.ac.uk/resources/sbse_repository/">http://crestweb.cs.ucl.ac.uk/resources/sbse_repository/</a>'
         },
         xAxis: {
             categories: categories,
@@ -436,17 +443,41 @@ function plotPlubicationsNumberByAuthors(entries){
                 }
             }
         },
+		exporting: {
+            buttons: {
+                customButton: {
+                    x: -40,
+                    onclick: viewDataAuthor,
+                    text: "View data"
+                }
+            }
+        },
         credits: {
             enabled: false
         },
         series: series
     });
+
+	//chart.renderer.button('Click me', 150, 25, function(){alert("oi")})
 }
 
 function plotPlubicationsNumberByApplications(entries){
     var data = [];
 
     var sumOthers = 0;
+
+	// Sort the Array
+    rankingByApplications.sort(function(a, b){
+        var diff = parseInt(a.count) - parseInt(b.count);
+
+        if(diff == 0){
+            return 0;
+        }else if(diff > 0){
+            return -1;
+        }else if(diff < 0){
+            return 1;
+        }
+    });
 
     $.each(rankingByApplications, function(key, entry){
         if(entry.count / entries.length< 0.02){
@@ -456,11 +487,15 @@ function plotPlubicationsNumberByApplications(entries){
         }else{
             data.push({name: entry.label.replace(" and "," and <br>"), y: entry.count});
         }
+
+		var label = (entry.label === "")?"No Informed": entry.label;
+
+		$('#table-view-data-application tr:last').after('<tr><td>'+(key+1)+'</td><td>'+label+'</td><td>'+entry.count+'</td></tr>');
     });
 
     data.push({name: "Others", y: sumOthers});
 
-    $('#chart-4').highcharts({
+    $('#chart-application').highcharts({
         chart: {
             plotBackgroundColor: null,
             plotBorderWidth: null,
@@ -470,9 +505,6 @@ function plotPlubicationsNumberByApplications(entries){
         },
         title: {
             text: "Number Of Publications by Application"
-        },
-        subtitle: {
-           text: 'Source: <a target="_blank" href="http://crestweb.cs.ucl.ac.uk/resources/sbse_repository/">http://crestweb.cs.ucl.ac.uk/resources/sbse_repository/</a>'
         },
         tooltip: {
             pointFormat: '{series.name}: <b>{point.y}</b>'
@@ -492,6 +524,15 @@ function plotPlubicationsNumberByApplications(entries){
         },
         credits: {
             enabled: false
+        },
+		exporting: {
+            buttons: {
+                customButton: {
+                    x: -40,
+                    onclick: viewDataApplication,
+                    text: "View data"
+                }
+            }
         },
         series: [{
             name: 'Number of Papers',

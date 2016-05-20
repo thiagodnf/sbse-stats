@@ -6,7 +6,13 @@ body{
     overflow-y: scroll;
 }
 
-.header, p, .chart{
+.modal-body {
+    max-height: calc(100vh - 210px);
+    overflow-y: auto;
+}
+
+
+.header, .chart{
     margin-bottom: 30px;
 }
 
