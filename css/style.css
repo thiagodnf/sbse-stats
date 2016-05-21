@@ -21,6 +21,11 @@ body{
     padding-bottom: 10px;
 }
 
+.credits h3{
+    color: rgba(0, 0, 0, .87);
+    font-weight: bold;
+}
+
 .header, .chart{
     margin-bottom: 30px;
 }
