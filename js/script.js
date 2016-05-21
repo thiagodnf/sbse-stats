@@ -6,6 +6,7 @@ var rankingByAuthors = [];
 var rankingByApplications = [];
 var rankingByJournals = [];
 var rankingByConferences = [];
+var rankingByApplicationAndYear = [];
 
 function sort(array){
 	array.sort(function(a, b){
@@ -111,12 +112,35 @@ function success(response){
 
     plotNumberOfPublicationsByAuthor(entries);
     plotNumberOfPublicationsByApplication(entries);
-	plotNumberOfPublicationsByJournal(entries);
+	plotNumberOfPublicationsByJournal(entries, years);
 	plotNumberOfPublicationsByConference(entries);
+	plotNumberOfPublicationsByApplicationAndYear(entries);
 
     hideSpin();
 
 	showCredits();
+}
+
+function getApplicationTypes(){
+	return {
+		"Coding Tools and Techniques": "1",
+		"Design Tools and Techniques": "2",
+		"Distributed Artificial Intelligence": "3",
+		"Distribution and Maintenance": "4",
+		"General Aspects and Survey": "5",
+		"Management": "6",
+		"Metrics": "7",
+		"Network Protocols": "8",
+		"Requirements/Specifications": "9",
+		"Security and Protection": "10",
+		"Software/Program Verification": "11",
+		"Testing and Debugging": "12",
+		"Testing and Debugging, General Aspects and Survey": "13",
+	};
+}
+
+function getApplications(application){
+	return getApplicationTypes()[application];
 }
 
 /** Convert the entry type to readable text */
@@ -257,6 +281,7 @@ function processEntry(entry){
     generateRankingByApplications(entry);
 	generateRankingByJournals(entry);
 	generateRankingByConferences(entry);
+	generateRankingByApplicationAndYear(entry);
 }
 
 function trimAllFields(entry){
@@ -317,8 +342,18 @@ function generateRankingByApplications(entry){
     insertOrUpdate(rankingByApplications, entry.application)
 }
 
+function generateRankingByApplicationAndYear(entry){
+	if(entry.application == undefined || entry.application == ""){
+		return;
+	}
+
+	var index = getApplications(entry.application);
+
+	insertOrUpdate(rankingByApplicationAndYear, entry.year + "_" + index);
+}
+
 function plotListOfPublications(series, years){
-    $("#chart-publications").highcharts({
+    $("#chart-publication").highcharts({
          chart: {
              type: 'column',
              marginTop: 100,
@@ -550,6 +585,78 @@ function plotNumberOfPublicationsByApplication(entries){
         series: [{
             name: 'Number of Papers',
             colorByPoint: true,
+            data: data
+        }]
+    });
+}
+
+function plotNumberOfPublicationsByApplicationAndYear(entries){
+
+	var data = [];
+
+	var applicationTypes = getApplicationTypes();
+
+	var types = {};
+
+	$.each(applicationTypes , function(key, entry){
+		types[entry] = key;
+	});
+
+	$.each(rankingByApplicationAndYear, function(key, entry){
+		var split = entry.label.split("_");
+		data.push({x: parseInt(split[0]), y: parseInt(split[1]), z: entry.count, name: 'BE', country: 'Belgium'});
+	});
+
+	$('#chart-publication-application').highcharts({
+        chart: {
+            type: 'bubble',
+            plotBorderWidth: 1,
+            zoomType: 'xy',
+			height: 500
+        },
+        legend: {
+            enabled: false
+        },
+        title: {
+            text: 'Number of Publications by Year and Application'
+        },
+        xAxis: {
+            gridLineWidth: 1,
+			min: 1974,
+            tickInterval: 1,
+			labels: {
+                rotation: -45,
+            }
+        },
+		yAxis: {
+			min: 0,
+            max: 14,
+            tickInterval: 1,
+			title: {
+				text: ""
+			},
+			labels: {
+                formatter: function() {
+					if(this.value <=0 || this.value >=types.length){
+						return "";
+					}
+					return types[this.value];
+				}
+            },
+
+        },
+        plotOptions: {
+            series: {
+                dataLabels: {
+                    enabled: true,
+                    format: '{point.z}'
+                }
+            }
+        },
+		credits: {
+            enabled: false
+        },
+        series: [{
             data: data
         }]
     });
