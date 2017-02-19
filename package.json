@@ -1,0 +1,25 @@
+{
+	"name": "sbse-stats",
+	"version": "1.0.0",
+	"description": "Statistics about the Search-Based Software Engineering Repository",
+	"main": "app.js",
+	"scripts": {
+		"start": "node app.js",
+        "release": "node build.js --release",
+        "build": "node build.js"
+	},
+	"engines": {
+		"node": ">=0.10.0"
+	},
+	"files": [
+		"app.js"
+	],
+	"author": "Thiago Nascimento Ferreira",
+	"license": "MIT",
+	"homepage": "http://thiagodnf.github.io/sbse-stats",
+	"dependencies": {
+		"serve-static": "",
+		"connect": "",
+		"network":""
+  	}
+}

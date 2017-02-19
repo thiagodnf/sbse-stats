@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=1" />
+        <meta name="description" content="Statistics about the Search-Based Software Engineering Repository">
+	  	<meta name="author" content="Thiago Nascimento">
+		<meta name="keywords" content="Search-Based Software Engineering, sbse, statistics">
+        <meta name="mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+		<meta name="apple-mobile-web-app-title" content="SBSE Stats">
+		<meta name="robots" content="index, follow">
+
+        <title>SBSE Stats</title>
+
+        <link rel="apple-touch-icon" sizes="57x57" href="img/favicon/apple-icon-57x57.png">
+        <link rel="apple-touch-icon" sizes="60x60" href="img/favicon/apple-icon-60x60.png">
+        <link rel="apple-touch-icon" sizes="72x72" href="img/favicon/apple-icon-72x72.png">
+        <link rel="apple-touch-icon" sizes="76x76" href="img/favicon/apple-icon-76x76.png">
+        <link rel="apple-touch-icon" sizes="114x114" href="img/favicon/apple-icon-114x114.png">
+        <link rel="apple-touch-icon" sizes="120x120" href="img/favicon/apple-icon-120x120.png">
+        <link rel="apple-touch-icon" sizes="144x144" href="img/favicon/apple-icon-144x144.png">
+        <link rel="apple-touch-icon" sizes="152x152" href="img/favicon/apple-icon-152x152.png">
+        <link rel="apple-touch-icon" sizes="180x180" href="img/favicon/apple-icon-180x180.png">
+        <link rel="icon" type="image/png" sizes="192x192"  href="img/favicon/android-icon-192x192.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="img/favicon/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="96x96" href="img/favicon/favicon-96x96.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="img/favicon/favicon-16x16.png">
+        <link rel="manifest" href="img/favicon/manifest.json">
+        <meta name="msapplication-TileColor" content="#1a6693">
+        <meta name="msapplication-TileImage" content="img/favicon/ms-icon-144x144.png">
+        <meta name="theme-color" content="#1a6693">
+
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/style.css">
+    </head>
+    <body>
+        <div class="container">
+            <div class="row header">
+                <div class="col-md-2">
+                    <img id="logo" class="img-responsive" alt="Responsive image" src="img/sbse.png"/>
+                </div>
+                <div class="col-md-10">
+                    <h4 id="title-1">Statistics of Publications on</h4>
+                    <h1 id="title-2">Search Based Software Engineering</h1>
+                </div>
+            </div>
+
+            <p>This page is maintained by <a target="_blank" href="http://www.github.com/thiagodnf">Thiago Nascimento</a>, Ph.D student at Federal University of Paraná</p>
+            <p>Source: <a target="_blank" href="http://crestweb.cs.ucl.ac.uk/resources/sbse_repository/">http://crestweb.cs.ucl.ac.uk/resources/sbse_repository/</a></p>
+
+            <br>
+
+            <div id="spin"></div>
+
+            <div id="error"></div>
+
+            <div id="charts">
+                <div class="chart" id="chart-publication"></div>
+                <div class="chart" id="chart-application"></div>
+                <div class="chart" id="chart-publication-application"></div>
+                <div class="chart" id="chart-author"></div>
+                <div class="chart" id="chart-journals"></div>
+                <div class="chart" id="chart-conferences"></div>
+            </div>
+
+            <div class="chart credits hide">
+                <h3>Credits</h3>
+                <p>This page uses some great libraries:</p>
+                <ul>
+                    <li><a href="https://osdn.jp/projects/sfnet_jsbibtex/">JavaScript BibTeX Parser</a></li>
+                    <li><a href="http://highcharts.com">Highcharts</a></li>
+                    <li><a href="https://jquery.com/">jQuery</a></li>
+                    <li><a href="http://getbootstrap.com/">Bootstrap</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="modal" id="modal-view-data-author" tabindex="-1" role="dialog" aria-labelledby="modal-change-location-label">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title" id="modal-change-location-label">Authors</h4>
+					</div>
+					<div class="modal-body">
+						<table class="table table-striped" id="table-view-data-author">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Author</th>
+                                    <th>Publications</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+        <div class="modal" id="modal-view-data-application" tabindex="-1" role="dialog" aria-labelledby="modal-change-location-label">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title" id="modal-change-location-label">Applications</h4>
+					</div>
+					<div class="modal-body">
+						<table class="table table-striped" id="table-view-data-application">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Author</th>
+                                    <th>Publications</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+        <div class="modal" id="modal-view-data-journals" tabindex="-1" role="dialog" aria-labelledby="modal-change-location-label">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title" id="modal-change-location-label">Journals</h4>
+					</div>
+					<div class="modal-body">
+						<table class="table table-striped" id="table-view-data-journals">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Author</th>
+                                    <th>Publications</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+        <div class="modal" id="modal-view-data-conferences" tabindex="-1" role="dialog" aria-labelledby="modal-change-location-label">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title" id="modal-change-location-label">Conferences</h4>
+					</div>
+					<div class="modal-body">
+						<table class="table table-striped" id="table-view-data-conferences">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Author</th>
+                                    <th>Publications</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+        <script type="text/javascript" charset="utf8" src="js/jquery.min.js"></script>
+        <script type="text/javascript" charset="utf8" src="js/highcharts.js"></script>
+        <script type="text/javascript" charset="utf8" src="js/highcharts-more.js"></script>
+        <script type="text/javascript" charset="utf8" src="js/bootstrap.min.js"></script>
+        <script type="text/javascript" charset="utf8" src="js/spin.min.js"></script>
+        <script type="text/javascript" charset="utf8" src="js/exporting.js"></script>
+        <script type="text/javascript" charset="utf8" src="js/BibTex-0.1.2.js"></script>
+        <script type="text/javascript" charset="utf8" src="js/script.js"></script>
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+          ga('create', 'UA-46693870-14', 'auto');
+          ga('send', 'pageview');
+        </script>
+    </body>
+</html>
