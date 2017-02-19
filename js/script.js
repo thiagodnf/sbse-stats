@@ -1,4 +1,4 @@
-var url = "https://dl.dropbox.com/s/wntlmqmauuirrm3/references.bib?dl=1";
+var url = "https://raw.githubusercontent.com/thiagodnf/sbse-stats/master/references.bib";
 var spinner;
 var maxResults = 30;
 var rankingByCountries = [];
